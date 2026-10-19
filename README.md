@@ -23,16 +23,14 @@
 
 ---
 
-<h3 align="center">🐍 Snake</h3>
+<h3 align="center">🐍 Contribution Snake</h3>
 
 <p align="center">
-  <a href="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@f4ce6e9/snake-game.svg">
-    <img src="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@f4ce6e9/snake-game.svg" alt="Play Snake" width="360" />
-  </a>
-</p>
-
-<p align="center">
-  ▶ <a href="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@f4ce6e9/snake-game.svg"><b>点击图片开玩</b></a> · 方向键 / WASD 移动 · 空格暂停 · 吃紫色格子加速
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-light.svg" />
+    <img src="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-dark.svg" alt="contribution snake" width="100%" />
+  </picture>
 </p>
 
 ---
