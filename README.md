@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/xh0915/xh0915@main/welcome.svg" alt="欢迎来到我的世界" />
+  <img src="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@main/welcome.svg" alt="欢迎来到我的世界" />
 </p>
 
 <h3 align="center">Hi, I'm Ricardo 👋</h3>
@@ -27,9 +27,9 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://cdn.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-light.svg" />
-    <img src="https://cdn.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-dark.svg" alt="contribution snake" width="100%" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-light.svg" />
+    <img src="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-dark.svg" alt="contribution snake" width="100%" />
   </picture>
 </p>
 
