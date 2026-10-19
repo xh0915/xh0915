@@ -20,7 +20,9 @@ jobs:
         uses: Platane/snk/svg-only@v3
         with:
           github_user_name: xh0915
-          outputs: dist/github-snake-dark.svg?palette=github-dark,dist/github-snake-light.svg?palette=github
+          outputs: |
+            dist/github-snake-dark.svg?palette=github-dark
+            dist/github-snake-light.svg?palette=github
 
       - name: Publish to output branch
         uses: crazy-max/ghaction-github-pages@v4

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./typing.svg" alt="欢迎来到我的世界" />
+  <img src="./welcome.svg" alt="欢迎来到我的世界" />
 </p>
 
 <h3 align="center">Hi, I'm Ricardo 👋</h3>
