@@ -16,13 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Generate snake SVG
-        uses: Platane/snk/svg-only@v3
-        with:
-          github_user_name: xh0915
-          outputs: |
-            dist/github-snake-dark.svg?palette=github-dark
-            dist/github-snake-light.svg?palette=github
+      - uses: actions/checkout@v4
+
+      - name: Generate contribution snake
+        run: node .github/scripts/generate-snake.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SNAKE_USER: xh0915
 
       - name: Publish to output branch
         uses: crazy-max/ghaction-github-pages@v4
