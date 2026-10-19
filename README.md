@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@main/welcome.svg" alt="欢迎来到我的世界" />
+  <img src="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@7ec02cf/welcome.svg" alt="欢迎来到我的世界" />
 </p>
 
 <h3 align="center">Hi, I'm Ricardo 👋</h3>
@@ -31,6 +31,18 @@
     <source media="(prefers-color-scheme: light)" srcset="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-light.svg" />
     <img src="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@output/github-snake-dark.svg" alt="contribution snake" width="100%" />
   </picture>
+</p>
+
+<h3 align="center">🎮 Snake Arcade</h3>
+
+<p align="center">
+  <a href="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@7ec02cf/snake-game.svg">
+    <img src="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@7ec02cf/snake-game.svg" alt="Play Snake" width="240" />
+  </a>
+</p>
+
+<p align="center">
+  ▶ <a href="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@7ec02cf/snake-game.svg"><b>点击开玩</b></a> · 方向键 / WASD 移动 · 空格暂停 · 吃苹果加速
 </p>
 
 ---
