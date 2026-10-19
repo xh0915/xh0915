@@ -1,9 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="600" viewBox="0 0 480 600" role="img" aria-label="Snake game">
   <defs>
-    <linearGradient id="skin" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7ee787"/>
-      <stop offset="100%" stop-color="#2ea043"/>
-    </linearGradient>
     <linearGradient id="titleg" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#2f81f7"/>
       <stop offset="50%" stop-color="#a371f7"/>
@@ -22,34 +18,35 @@
     </style>
   </defs>
 
-  <!-- 背景 -->
+  <!-- 背景与顶栏 -->
   <rect width="480" height="600" rx="16" fill="#0d1117"/>
-  <!-- 顶栏 -->
   <text class="hud" x="24" y="34">SCORE</text>
   <text class="val" id="score" x="90" y="34">0</text>
   <text class="hud" x="330" y="34">BEST</text>
   <text class="val" id="best" x="392" y="34">0</text>
 
-  <!-- 游戏场 -->
   <g id="field" transform="translate(0,56)">
     <rect x="0" y="0" width="480" height="480" fill="#010409"/>
+    <!-- 贡献图底格 -->
+    <g id="grid"/>
     <rect x="0" y="0" width="480" height="480" fill="none" stroke="#21262d" stroke-width="2" rx="8"/>
     <g id="entities"/>
-    <!-- 开始画面（作为图片预览时显示；打开后由脚本隐藏） -->
+    <!-- 开始画面 -->
     <g id="start">
       <text class="big" x="240" y="150" text-anchor="middle">SNAKE</text>
-      <g transform="translate(196,190)" filter="url(#g)">
-        <rect x="0" y="0" width="22" height="22" rx="6" fill="#7ee787"/>
-        <rect x="26" y="0" width="22" height="22" rx="6" fill="#56d364"/>
-        <rect x="52" y="0" width="22" height="22" rx="6" fill="#3fb950"/>
-        <rect x="78" y="0" width="22" height="22" rx="6" fill="#2ea043"/>
-        <circle cx="7" cy="7" r="2.4" fill="#0d1117"/>
+      <g transform="translate(196,190)">
+        <rect x="0" y="0" width="18" height="18" rx="4" fill="#26a641"/>
+        <rect x="24" y="0" width="18" height="18" rx="4" fill="#26a641"/>
+        <rect x="48" y="0" width="18" height="18" rx="4" fill="#26a641"/>
+        <rect x="72" y="0" width="18" height="18" rx="4" fill="#39d353"/>
+        <circle cx="79" cy="5" r="2" fill="#0d1117"/>
+        <circle cx="79" cy="13" r="2" fill="#0d1117"/>
       </g>
-      <circle cx="330" cy="201" r="9" fill="#ff7b72" filter="url(#g)"/>
+      <rect x="318" y="190" width="18" height="18" rx="4" fill="#a371f7" filter="url(#g)"/>
       <text class="val" x="240" y="290" text-anchor="middle">▶ Play</text>
       <text class="hint" x="240" y="330" text-anchor="middle">方向键 / WASD 移动</text>
       <text class="hint" x="240" y="352" text-anchor="middle">空格暂停 · 死后空格重开</text>
-      <text class="hint" x="240" y="440" text-anchor="middle">吃苹果变长、加分、加速</text>
+      <text class="hint" x="240" y="440" text-anchor="middle">吃掉紫色格子变长、加分、加速</text>
     </g>
     <!-- 暂停画面 -->
     <g id="pause" opacity="0">
@@ -70,7 +67,8 @@
   <script type="text/javascript"><![CDATA[
     (function () {
       var NS = "http://www.w3.org/2000/svg";
-      var CELL = 24, COLS = 20, ROWS = 20;
+      var CELL = 24, COLS = 20, ROWS = 20, S = 18, PAD = 3;
+      var gGrid = document.getElementById("grid");
       var gEnt = document.getElementById("entities");
       var elScore = document.getElementById("score");
       var elBest = document.getElementById("best");
@@ -78,7 +76,7 @@
       var elPause = document.getElementById("pause");
       var elStart = document.getElementById("start");
       var elFinal = document.getElementById("finalScore");
-      var snake, dir, queue, food, score, speed, timer, dead, paused, started;
+      var snake, dir, queue, food, score, speed, timer, dead, paused, started = false;
       var best = 0;
       try { best = parseInt(localStorage.getItem("snake-best") || "0", 10) || 0; } catch (e) {}
       elBest.textContent = best;
@@ -87,6 +85,12 @@
         var el = document.createElementNS(NS, tag);
         for (var k in attrs) el.setAttribute(k, attrs[k]);
         return el;
+      }
+      // 静态贡献底格
+      for (var gy = 0; gy < ROWS; gy++) {
+        for (var gx = 0; gx < COLS; gx++) {
+          gGrid.appendChild(mk("rect", { x: gx*CELL+PAD, y: gy*CELL+PAD, width: S, height: S, rx: 4, fill: "#161b22" }));
+        }
       }
       function reset() {
         snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}];
@@ -104,14 +108,21 @@
       }
       function draw() {
         while (gEnt.firstChild) gEnt.removeChild(gEnt.firstChild);
-        var f = mk("circle", { cx: food.x*CELL+CELL/2, cy: food.y*CELL+CELL/2, r: 8, fill: "#ff7b72", filter: "url(#g)" });
-        gEnt.appendChild(f);
+        // 紫色食物格
+        gEnt.appendChild(mk("rect", { x: food.x*CELL+PAD, y: food.y*CELL+PAD, width: S, height: S, rx: 4, fill: "#a371f7", filter: "url(#g)" }));
+        // 蛇身（绿色贡献格，由尾到头）
         for (var i = snake.length-1; i >= 0; i--) {
           var s = snake[i];
-          var r = mk("rect", { x: s.x*CELL+2, y: s.y*CELL+2, width: CELL-4, height: CELL-4, rx: 6, fill: i===0 ? "#7ee787" : "url(#skin)" });
-          if (i===0) r.setAttribute("filter", "url(#g)");
-          gEnt.appendChild(r);
+          gEnt.appendChild(mk("rect", { x: s.x*CELL+PAD, y: s.y*CELL+PAD, width: S, height: S, rx: 4,
+            fill: i===0 ? "#39d353" : (i % 2 ? "#26a641" : "#2ba84a") }));
         }
+        // 蛇头眼睛（朝向移动方向）
+        var h = snake[0];
+        var cx = h.x*CELL+CELL/2, cy = h.y*CELL+CELL/2;
+        var fx = dir.x*4.2, fy = dir.y*4.2;
+        var sx = -dir.y*4.2, sy = dir.x*4.2;
+        gEnt.appendChild(mk("circle", { cx: cx+fx+sx, cy: cy+fy+sy, r: 2.3, fill: "#0d1117" }));
+        gEnt.appendChild(mk("circle", { cx: cx+fx-sx, cy: cy+fy-sy, r: 2.3, fill: "#0d1117" }));
       }
       function step() {
         if (queue.length) { var nd = queue.shift(); if (nd.x !== -dir.x || nd.y !== -dir.y) dir = nd; }
@@ -139,7 +150,7 @@
         reset(); loop();
       }
       function setDir(x, y) {
-        if (!started) { startOrRestart(); }
+        if (!started) startOrRestart();
         if (dead) return;
         if (queue.length < 2) queue.push({x:x,y:y});
         if (paused) togglePause();

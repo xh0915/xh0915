@@ -12,46 +12,43 @@
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    <mask id="m1"><rect x="0" y="6" width="0" height="52" fill="#fff">
+    <mask id="m1"><rect x="176" y="6" width="0" height="52" fill="#fff">
       <animate attributeName="width" from="0" to="268" dur="1.5s" begin="0.4s" fill="freeze"/>
     </rect></mask>
-    <mask id="m2"><rect x="0" y="62" width="0" height="44" fill="#fff">
+    <mask id="m2"><rect x="177" y="62" width="0" height="44" fill="#fff">
       <animate attributeName="width" from="0" to="266" dur="1.5s" begin="2.4s" fill="freeze"/>
     </rect></mask>
-    <mask id="m3"><rect x="0" y="108" width="0" height="42" fill="#fff">
+    <mask id="m3"><rect x="76" y="108" width="0" height="42" fill="#fff">
       <animate attributeName="width" from="0" to="468" dur="1.9s" begin="4.5s" fill="freeze"/>
     </rect></mask>
     <style>
       .t { font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", Ubuntu, sans-serif; font-weight: 700; }
-      .cur { fill: #2f81f7; }
     </style>
   </defs>
 
-  <!-- 第一行：主标题（渐变霓虹） -->
+  <!-- 三行居中文字，依次打出 -->
   <g mask="url(#m1)" filter="url(#glow)">
-    <text class="t" x="10" y="46" font-size="32" fill="url(#g1)">欢迎来到我的世界</text>
+    <text class="t" x="310" y="46" font-size="32" text-anchor="middle" fill="url(#g1)">欢迎来到我的世界</text>
   </g>
-  <!-- 第二行：名字（薄荷绿） -->
   <g mask="url(#m2)" filter="url(#glow)">
-    <text class="t" x="10" y="96" font-size="24" fill="#3fb950">Hi, I'm Ricardo 👋</text>
+    <text class="t" x="310" y="96" font-size="24" text-anchor="middle" fill="#3fb950">Hi, I'm Ricardo 👋</text>
   </g>
-  <!-- 第三行：签名（琥珀金） -->
   <g mask="url(#m3)" filter="url(#glow)">
-    <text class="t" x="10" y="140" font-size="22" fill="#d29922">Building cool stuff with code ✨</text>
+    <text class="t" x="310" y="140" font-size="22" text-anchor="middle" fill="#d29922">Building cool stuff with code ✨</text>
   </g>
 
   <!-- 光标1：随第一行打字闪烁，打完隐藏 -->
-  <rect class="cur" x="282" y="18" width="4" height="32" rx="1">
+  <rect x="450" y="18" width="4" height="32" rx="1" fill="#2f81f7">
     <animate attributeName="opacity" values="1;1;0;1;0;1;0;1" keyTimes="0;0.06;0.22;0.38;0.54;0.7;0.86;1" dur="1.5s" begin="0.4s" fill="freeze"/>
     <animate attributeName="opacity" from="1" to="0" dur="0.01s" begin="2.05s" fill="freeze"/>
   </rect>
   <!-- 光标2：随第二行打字闪烁，打完隐藏 -->
-  <rect class="cur" x="280" y="74" width="4" height="26" rx="1" fill="#3fb950">
+  <rect x="447" y="74" width="4" height="26" rx="1" fill="#3fb950">
     <animate attributeName="opacity" values="1;1;0;1;0;1;0;1" keyTimes="0;0.06;0.22;0.38;0.54;0.7;0.86;1" dur="1.5s" begin="2.4s" fill="freeze"/>
     <animate attributeName="opacity" from="1" to="0" dur="0.01s" begin="4.05s" fill="freeze"/>
   </rect>
-  <!-- 光标3：打完后留在行尾永久呼吸（不重播打字） -->
-  <rect class="cur" x="482" y="120" width="4" height="24" rx="1" fill="#d29922">
+  <!-- 光标3：打完后留在行尾永久呼吸 -->
+  <rect x="550" y="120" width="4" height="24" rx="1" fill="#d29922">
     <animate attributeName="opacity" values="1;1;0;1" keyTimes="0;0.5;0.75;1" dur="1.2s" begin="4.5s" repeatCount="indefinite"/>
   </rect>
 </svg>
