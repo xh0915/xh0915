@@ -23,6 +23,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SNAKE_USER: xh0915
+          SNAKE_VER: ${{ github.run_number }}
 
       - name: Publish to output branch
         uses: crazy-max/ghaction-github-pages@v4
@@ -32,8 +33,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Purge jsDelivr cache
+      # 每次生成的文件名带 run_number 版本号，README 指向最新版；URL 永远是新的，绕开一切 CDN 缓存
+      - name: Point README to the fresh snake
         run: |
-          sleep 10
-          curl -s "https://purge.jsdelivr.net/gh/xh0915/xh0915@output/contribution-snake-dark.svg" || true
-          curl -s "https://purge.jsdelivr.net/gh/xh0915/xh0915@output/contribution-snake-light.svg" || true
+          sed -i -E "s/contribution-snake-dark(\.[0-9]+)?\.svg/contribution-snake-dark.${{ github.run_number }}.svg/g" README.md
+          sed -i -E "s/contribution-snake-light(\.[0-9]+)?\.svg/contribution-snake-light.${{ github.run_number }}.svg/g" README.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --cached --quiet || git commit -m "chore: refresh contribution snake to run ${{ github.run_number }} [skip ci]"
+          git push

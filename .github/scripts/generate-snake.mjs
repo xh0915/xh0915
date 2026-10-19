@@ -216,11 +216,13 @@ function buildSvg(weeks, pal) {
 
 try {
   const weeks = await fetchCalendar();
+  const VER = process.env.SNAKE_VER || '';
+  const suffix = VER ? `.${VER}` : '';
   mkdirSync(OUT, { recursive: true });
   for (const [name, pal] of Object.entries(PALETTES)) {
     const svg = buildSvg(weeks, pal);
-    writeFileSync(`${OUT}/contribution-snake-${name}.svg`, svg);
-    console.log(`contribution-snake-${name}.svg  ${(svg.length / 1024).toFixed(1)}KB`);
+    writeFileSync(`${OUT}/contribution-snake-${name}${suffix}.svg`, svg);
+    console.log(`contribution-snake-${name}${suffix}.svg  ${(svg.length / 1024).toFixed(1)}KB`);
   }
   console.log(`OK grid=${weeks.length}x${H}`);
 } catch (err) {
