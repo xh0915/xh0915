@@ -1,11 +1,12 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 
 /**
- * 自研贡献蛇生成器
- * - 铺满均匀网格（边缘残缺周补空格），格子严格对齐
- * - 蛇按格子逐格移动（serpentine 路线覆盖每一个格子）
- * - 吃到紫色食物后变长（3 节起步，封顶 10 节）
- * - 格子颜色来自真实贡献数据；SMIL 动画，无 JS，可被 <img> 直接渲染
+ * 自研贡献蛇生成器 v2
+ * - 均匀网格铺满（边缘残缺周补空格），格子严格对齐
+ * - 有机随机游走路线：偏好直行、向右推进、主动经过有贡献的格子；每日换路线（日期做种子）
+ * - 蛇严格在格子上移动；吃紫色格子后变长（3 节起步，封顶 10 节）
+ * - 进食动画：紫格爆开 + 冲击环 + 蛇头闪白
+ * - 格子颜色来自真实贡献数据；SMIL 动画，无 JS
  */
 
 const USER = process.env.SNAKE_USER || 'xh0915';
@@ -13,8 +14,9 @@ const OUT = 'dist';
 const DT = 0.1;                 // 每格耗时（秒）
 const H = 7;                    // 一周 7 天
 const CELL = 12, GAP = 4, PITCH = CELL + GAP, PAD = 2;
-const FADE_IN = 4, FADE_OUT = 5; // 循环首尾的淡入淡出 ticks
+const FADE_IN = 4, FADE_OUT = 5;
 const START_LEN = 3, MAX_LEN = 10;
+const COOLDOWN = 14;            // 同一格子多少 tick 后才可再进入
 const FOOD_FRACTIONS = [0.10, 0.22, 0.34, 0.47, 0.60, 0.74];
 
 const LEVEL_INDEX = { NONE: 0, FIRST_QUADRANT: 1, SECOND_QUADRANT: 2, THIRD_QUADRANT: 3, FOURTH_QUADRANT: 4 };
@@ -25,7 +27,6 @@ const PALETTES = {
 
 async function fetchCalendar() {
   if (process.env.SNAKE_TEST === '1') {
-    // 本地验证用的合成贡献数据
     const weeks = [];
     let seed = 42;
     const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
@@ -63,61 +64,133 @@ async function fetchCalendar() {
   return json.data.user.contributionsCollection.contributionCalendar.weeks;
 }
 
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** 有机随机游走：直行偏好 + 向右推进 + 贡献格吸引 + 冷却防卡 */
+function buildPath(W, grid, rng) {
+  const T = W * H;
+  const visit = new Map();
+  const key = (r, c) => r * W + c;
+  const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]]; // [dc, dr]
+  let r = Math.floor(H / 2), c = 0;
+  let dir = [1, 0];
+  const path = [];
+  for (let t = 0; t < T; t++) {
+    path.push([c, r]);
+    visit.set(key(r, c), t);
+    const cands = [];
+    let total = 0;
+    for (const d of DIRS) {
+      if (d[0] === -dir[0] && d[1] === -dir[1]) continue; // 禁止掉头
+      const nr = r + d[1], nc = c + d[0];
+      if (nr < 0 || nr >= H || nc < 0 || nc >= W) continue;
+      const last = visit.get(key(nr, nc));
+      const cooled = last === undefined || (t - last) > COOLDOWN;
+      let w = cooled ? 1 : 0.04;
+      if (d[0] === dir[0] && d[1] === dir[1]) w *= 5;   // 偏好直行（长滑行）
+      if (d[0] === 1) w *= 1.6;                          // 整体向右推进
+      const day = grid[nr][nc];
+      if (day && (LEVEL_INDEX[day.contributionLevel] ?? 0) > 0) w *= 1.6; // 被绿色贡献格吸引
+      cands.push({ d, w });
+      total += w;
+    }
+    if (total === 0) { // 卡死兜底：掉头
+      dir = [-dir[0], -dir[1]];
+      r = Math.max(0, Math.min(H - 1, r + dir[1]));
+      c = Math.max(0, Math.min(W - 1, c + dir[0]));
+      continue;
+    }
+    let x = rng() * total;
+    let pick = cands[cands.length - 1].d;
+    for (const cd of cands) { x -= cd.w; if (x <= 0) { pick = cd.d; break; } }
+    dir = pick;
+    r += dir[1]; c += dir[0];
+  }
+  return { path, visit };
+}
+
+/** 选进食 tick：间隔均匀，并校验食物格在可见期间没被蛇提前路过 */
+function pickEatTicks(path, T) {
+  const eatTicks = [];
+  for (const f of FOOD_FRACTIONS) {
+    let e = Math.round(T * f);
+    if (eatTicks.length) e = Math.max(e, eatTicks[eatTicks.length - 1] + 20);
+    let guard = 0, ok = false;
+    while (guard++ < 300 && e < T - FADE_OUT - 2) {
+      const r0 = eatTicks.length === 0 ? FADE_IN + 2 : eatTicks[eatTicks.length - 1] + 4;
+      if (e - r0 < 8) { e += 6; continue; }
+      const [fc, fr] = path[e];
+      let clash = false;
+      for (let tt = r0; tt < e; tt++) { if (path[tt][0] === fc && path[tt][1] === fr) { clash = true; break; } }
+      if (!clash) { ok = true; break; }
+      e += 6;
+    }
+    if (!ok) break;
+    eatTicks.push(e);
+  }
+  return eatTicks;
+}
+
 function buildSvg(weeks, pal) {
   const W = weeks.length;
-  // 网格：按首日星期补齐行偏移，边缘缺日视为空格
   const pad = new Date(weeks[0].contributionDays[0].date + 'T00:00:00Z').getUTCDay();
   const grid = Array.from({ length: H }, () => Array(W).fill(null));
   weeks.forEach((week, c) => {
-    week.contributionDays.forEach((day, k) => {
-      grid[(pad + k) % H][c] = day;
-    });
+    week.contributionDays.forEach((day, k) => { grid[(pad + k) % H][c] = day; });
   });
 
-  // 蛇的路线：逐列蛇形遍历，覆盖每个格子
-  const path = [];
-  for (let c = 0; c < W; c++) {
-    if (c % 2 === 0) { for (let r = 0; r < H; r++) path.push([c, r]); }
-    else { for (let r = H - 1; r >= 0; r--) path.push([c, r]); }
-  }
+  const seed = Math.floor(Date.now() / 86400000) ^ (W * 7919);
+  const { path } = buildPath(W, grid, mulberry32(seed));
   const T = path.length;
   const dur = (T * DT).toFixed(2);
-  const eatTicks = FOOD_FRACTIONS.map(f => Math.round(T * f));
+  const eatTicks = pickEatTicks(path, T);
   const nSeg = Math.min(MAX_LEN, START_LEN + eatTicks.length);
   const appear = i => (i < START_LEN ? 0 : eatTicks[i - START_LEN]);
-  const fx = ([c, r]) => c * PITCH + PAD;
-  const fy = ([c, r]) => r * PITCH + PAD;
-  const kt = v => (Math.round(v * 1e6) / 1e6).toFixed(6).replace(/0+$/, '0');
+  const cx = ([c, r]) => c * PITCH + PAD + CELL / 2;
+  const cy = ([c, r]) => r * PITCH + PAD + CELL / 2;
+  const kt = v => (Math.round(Math.min(Math.max(v, 0), 1) * 1e6) / 1e6).toFixed(6).replace(/0+$/, '0');
 
   let s = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W * PITCH + PAD * 2}" height="${H * PITCH + PAD * 2}" viewBox="0 0 ${W * PITCH + PAD * 2} ${H * PITCH + PAD * 2}" role="img" aria-label="contribution snake">`;
   s += `<defs><filter id="gl" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
-  s += `<path id="route" d="M${path.map(([c, r]) => `${fx([c, r])} ${fy([c, r])}`).join('L')}"/></defs>`;
+  s += `<path id="route" d="M${path.map(([c, r]) => `${cx([c, r]) - CELL / 2} ${cy([c, r]) - CELL / 2}`).join('L')}"/></defs>`;
 
-  // 贡献格子（均匀铺满）
+  // 贡献格子
   s += '<g>';
   for (let r = 0; r < H; r++) {
     for (let c = 0; c < W; c++) {
       const day = grid[r][c];
       const lv = day ? (LEVEL_INDEX[day.contributionLevel] ?? 0) : 0;
-      const fill = pal.greens[lv];
       const tip = day && day.contributionCount > 0 ? `<title>${day.date} · ${day.contributionCount} contributions</title>` : '';
-      s += `<rect x="${fx([c, r])}" y="${fy([c, r])}" width="${CELL}" height="${CELL}" rx="3" fill="${fill}">${tip}</rect>`;
+      s += `<rect x="${cx([c, r]) - CELL / 2}" y="${cy([c, r]) - CELL / 2}" width="${CELL}" height="${CELL}" rx="3" fill="${pal.greens[lv]}">${tip}</rect>`;
     }
   }
   s += '</g>';
 
-  // 食物（紫色格子，蛇靠近前出现、吃掉后消失）
+  // 食物：待在格子里轻微等待 → 被吃瞬间放大爆开 + 冲击环
   s += '<g>';
   eatTicks.forEach((e, f) => {
     const r0 = f === 0 ? FADE_IN + 2 : eatTicks[f - 1] + 4;
-    const [c, r] = path[e];
-    s += `<rect x="${fx([c, r])}" y="${fy([c, r])}" width="${CELL}" height="${CELL}" rx="3" fill="${pal.food}" filter="url(#gl)" opacity="0">`
-      + `<animate attributeName="opacity" dur="${dur}s" repeatCount="indefinite" calcMode="linear" `
-      + `keyTimes="0;${kt(r0 / T)};${kt((r0 + 1) / T)};${kt(e / T)};${kt((e + 1) / T)};1" values="0;0;1;1;0;0"/></rect>`;
+    const x = cx(path[e]), y = cy(path[e]);
+    s += `<g transform="translate(${x},${y})">`
+      + `<rect x="${-CELL / 2}" y="${-CELL / 2}" width="${CELL}" height="${CELL}" rx="3" fill="${pal.food}" filter="url(#gl)" opacity="0">`
+      + `<animate attributeName="opacity" dur="${dur}s" repeatCount="indefinite" calcMode="linear" keyTimes="0;${kt(r0 / T)};${kt((r0 + 1) / T)};${kt(e / T)};${kt((e + 3) / T)};1" values="0;0;1;1;0;0"/>`
+      + `<animateTransform attributeName="transform" type="scale" dur="${dur}s" repeatCount="indefinite" calcMode="linear" keyTimes="0;${kt(e / T)};${kt((e + 3) / T)};1" values="1;1;1.9"/>`
+      + `</rect>`
+      + `<rect x="${-CELL / 2}" y="${-CELL / 2}" width="${CELL}" height="${CELL}" rx="3" fill="none" stroke="${pal.food}" stroke-width="2" opacity="0">`
+      + `<animate attributeName="opacity" dur="${dur}s" repeatCount="indefinite" calcMode="linear" keyTimes="0;${kt(e / T)};${kt((e + 0.4) / T)};${kt((e + 3.5) / T)};1" values="0;0;0.9;0;0"/>`
+      + `<animateTransform attributeName="transform" type="scale" dur="${dur}s" repeatCount="indefinite" calcMode="linear" keyTimes="0;${kt(e / T)};${kt((e + 3.5) / T)};1" values="1;1;2.4"/>`
+      + `</rect></g>`;
   });
   s += '</g>';
 
-  // 蛇（逐格跳跃；第 i 节比头晚 i 格出发；到达出现 tick 时挂上尾巴并常驻）
+  // 蛇：逐格滑行；到达出现 tick 时挂上尾巴；头在进食瞬间闪白
   s += '<g>';
   for (let i = 0; i < nSeg; i++) {
     const a = appear(i);
@@ -128,7 +201,14 @@ function buildSvg(weeks, pal) {
     const vTail = a > FADE_IN ? '0;0;1;1;0;0' : '0;1;1;0;0';
     s += `<rect width="${CELL}" height="${CELL}" rx="3" fill="${pal.snake}" opacity="0"${head ? ' filter="url(#gl)"' : ''}>`
       + `<animateMotion dur="${dur}s" begin="${(-i * DT).toFixed(2)}s" repeatCount="indefinite"><mpath href="#route" xlink:href="#route"/></animateMotion>`
-      + `<animate attributeName="opacity" dur="${dur}s" repeatCount="indefinite" calcMode="linear" keyTimes="${ktTail}" values="${vTail}"/></rect>`;
+      + `<animate attributeName="opacity" dur="${dur}s" repeatCount="indefinite" calcMode="linear" keyTimes="${ktTail}" values="${vTail}"/>`;
+    if (head) {
+      const ft = [0], fv = [pal.snake];
+      for (const e of eatTicks) { ft.push(kt(e / T), kt((e + 1) / T)); fv.push('#ffffff', pal.snake); }
+      ft.push('1'); fv.push(pal.snake);
+      s += `<animate attributeName="fill" dur="${dur}s" repeatCount="indefinite" calcMode="discrete" keyTimes="${ft.join(';')}" values="${fv.join(';')}"/>`;
+    }
+    s += '</rect>';
   }
   s += '</g></svg>';
   return s;
