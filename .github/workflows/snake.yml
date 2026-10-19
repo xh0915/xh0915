@@ -31,3 +31,9 @@ jobs:
           build_dir: dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Purge jsDelivr cache
+        run: |
+          sleep 10
+          curl -s "https://purge.jsdelivr.net/gh/xh0915/xh0915@output/contribution-snake-dark.svg" || true
+          curl -s "https://purge.jsdelivr.net/gh/xh0915/xh0915@output/contribution-snake-light.svg" || true
