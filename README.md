@@ -1,8 +1,8 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/xh0915/xh0915/main/assets/hero-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/xh0915/xh0915/main/assets/hero-light.svg" />
-    <img src="https://raw.githubusercontent.com/xh0915/xh0915/main/assets/hero-light.svg" alt="里卡多 Ricardo · 独立开发者 · AI 工具与插件" width="100%" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@803e552/assets/hero-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@803e552/assets/hero-light.svg" />
+    <img src="https://testingcf.jsdelivr.net/gh/xh0915/xh0915@803e552/assets/hero-light.svg" alt="里卡多 Ricardo · 独立开发者 · AI 工具与插件" width="100%" />
   </picture>
 </p>
 
