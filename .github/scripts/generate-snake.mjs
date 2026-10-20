@@ -28,8 +28,8 @@ function levelOf(day) {
   return day.contributionCount > 0 ? 4 : 0;
 }
 const PALETTES = {
-  dark:  { empty: '#0c2447', levels: ['#0c2447', '#123566', '#1e4f9e', '#4c73f8', '#8ea6ff'], snake: '#dbe9ff', food: '#6ccbf7', flash: '#6ccbf7' },
-  light: { empty: '#edf3fb', levels: ['#edf3fb', '#dbe8ff', '#a9c6ff', '#6f8dff', '#2743d8'], snake: '#0a1b3d', food: '#4aa8dd', flash: '#6ccbf7' },
+  dark:  { empty: '#e3efff', levels: ['#e3efff', '#cfe3ff', '#aacaff', '#7fa8ff', '#4f78ee'], snake: '#1a3d96', food: '#0899bd', flash: '#19bfe3' },
+  light: { empty: '#f4f9ff', levels: ['#f4f9ff', '#e4f0ff', '#c5ddff', '#9bbfff', '#648bf8'], snake: '#1d43ad', food: '#0899bd', flash: '#19bfe3' },
 };
 
 async function fetchCalendar() {

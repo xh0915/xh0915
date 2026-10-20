@@ -24,12 +24,12 @@
 <h3 align="center">TOOLKIT / 工具</h3>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-061A3F?style=flat-square&amp;logo=python&amp;logoColor=8EA6FF" alt="Python" />
-  <img src="https://img.shields.io/badge/FastAPI-061A3F?style=flat-square&amp;logo=fastapi&amp;logoColor=8EA6FF" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/Vue%203-061A3F?style=flat-square&amp;logo=vue.js&amp;logoColor=8EA6FF" alt="Vue 3" />
-  <img src="https://img.shields.io/badge/Vite-061A3F?style=flat-square&amp;logo=vite&amp;logoColor=8EA6FF" alt="Vite" />
-  <img src="https://img.shields.io/badge/CSS-061A3F?style=flat-square&amp;logo=css3&amp;logoColor=8EA6FF" alt="CSS" />
-  <img src="https://img.shields.io/badge/SVG-061A3F?style=flat-square&amp;logo=svg&amp;logoColor=8EA6FF" alt="SVG" />
+  <img src="https://img.shields.io/badge/Python-DCEBFF?style=flat-square&amp;logo=python&amp;logoColor=1D4ED8" alt="Python" />
+  <img src="https://img.shields.io/badge/FastAPI-DCEBFF?style=flat-square&amp;logo=fastapi&amp;logoColor=1D4ED8" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Vue%203-DCEBFF?style=flat-square&amp;logo=vue.js&amp;logoColor=1D4ED8" alt="Vue 3" />
+  <img src="https://img.shields.io/badge/Vite-DCEBFF?style=flat-square&amp;logo=vite&amp;logoColor=1D4ED8" alt="Vite" />
+  <img src="https://img.shields.io/badge/CSS-DCEBFF?style=flat-square&amp;logo=css3&amp;logoColor=1D4ED8" alt="CSS" />
+  <img src="https://img.shields.io/badge/SVG-DCEBFF?style=flat-square&amp;logo=svg&amp;logoColor=1D4ED8" alt="SVG" />
 </p>
 
 <h3 align="center">CONTRIBUTION / 贡献</h3>

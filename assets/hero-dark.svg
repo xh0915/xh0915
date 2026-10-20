@@ -1,25 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
   <title id="title">里卡多 Ricardo · AI 工具与插件</title>
-  <desc id="desc">蓝白鲸鱼主题主页横幅（深色）：独立开发者里卡多，专注 AI 工具与插件。</desc>
+  <desc id="desc">明亮的冰蓝鲸鱼主题主页横幅（深色模式版）：独立开发者里卡多，专注 AI 工具与插件。</desc>
   <defs>
     <linearGradient id="dbg" x1="0" y1="0" x2="1200" y2="300" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#081f44"/>
-      <stop offset=".55" stop-color="#061a3f"/>
-      <stop offset="1" stop-color="#04122c"/>
+      <stop offset="0" stop-color="#f4fbff"/>
+      <stop offset=".52" stop-color="#e7f4ff"/>
+      <stop offset="1" stop-color="#d3e9ff"/>
+    </linearGradient>
+    <linearGradient id="dwhaleGrad" x1="56" y1="80" x2="206" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7db4ff"/>
+      <stop offset=".55" stop-color="#4d6bfe"/>
+      <stop offset="1" stop-color="#3454ea"/>
     </linearGradient>
     <radialGradient id="dhaze" cx="0" cy="0" r="1" gradientTransform="translate(1020 140) rotate(90) scale(240 320)" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#4d6bfe" stop-opacity=".38"/>
-      <stop offset="1" stop-color="#4d6bfe" stop-opacity="0"/>
+      <stop stop-color="#5b8cff" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#5b8cff" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="dsweep" x1="980" y1="150" x2="1098" y2="150" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#8ea6ff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#8ea6ff" stop-opacity=".22"/>
+      <stop stop-color="#3d6bf5" stop-opacity="0"/>
+      <stop offset="1" stop-color="#3d6bf5" stop-opacity=".22"/>
     </linearGradient>
     <pattern id="ddots" width="18" height="18" patternUnits="userSpaceOnUse">
-      <circle cx="1.5" cy="1.5" r="1.1" fill="#8ea6ff" fill-opacity=".22"/>
+      <circle cx="1.5" cy="1.5" r="1.1" fill="#3d6bf5" fill-opacity=".24"/>
     </pattern>
     <filter id="dshadow" x="-30%" y="-30%" width="160%" height="180%">
-      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000a1e" flood-opacity=".55"/>
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#2a5aa8" flood-opacity=".18"/>
     </filter>
     <clipPath id="dradarClip"><circle cx="980" cy="150" r="118"/></clipPath>
     <path id="dwhale" d="M23.748 4.651c-.254-.124-.364.113-.512.233-.051.04-.094.09-.137.137-.372.397-.806.657-1.373.626-.829-.046-1.537.214-2.163.848-.133-.782-.575-1.248-1.247-1.548-.352-.155-.708-.311-.955-.65-.172-.24-.219-.509-.305-.774-.055-.16-.11-.323-.293-.35-.2-.031-.278.136-.356.276-.313.572-.434 1.202-.422 1.84.027 1.436.633 2.58 1.838 3.393.137.094.172.187.129.323-.082.28-.18.553-.266.833-.055.179-.137.218-.328.14a5.5 5.5 0 0 1-1.737-1.179c-.857-.828-1.631-1.743-2.597-2.46a12 12 0 0 0-.689-.47c-.985-.957.13-1.743.387-1.836.27-.098.094-.433-.778-.428-.872.003-1.67.295-2.687.685a3 3 0 0 1-.465.136 9.6 9.6 0 0 0-2.883-.101c-1.885.21-3.39 1.1-4.497 2.622C.082 8.776-.231 10.854.152 13.02c.403 2.284 1.568 4.175 3.36 5.653 1.857 1.533 3.997 2.284 6.438 2.14 1.482-.085 3.132-.284 4.994-1.86.47.234.962.328 1.78.398.629.058 1.235-.031 1.705-.129.735-.155.684-.836.418-.961-2.155-1.004-1.682-.595-2.112-.926 1.095-1.295 2.768-3.598 3.284-6.733.05-.346.115-.834.108-1.114-.004-.171.035-.238.23-.257a4.2 4.2 0 0 0 1.545-.475c1.397-.763 1.96-2.016 2.093-3.517.02-.23-.004-.467-.247-.588M11.58 18.168c-2.088-1.642-3.101-2.183-3.52-2.16-.39.024-.32.472-.234.763.09.288.207.487.371.74.114.167.192.416-.113.603-.673.416-1.842-.14-1.897-.168-1.361-.801-2.5-1.86-3.301-3.306-.775-1.393-1.225-2.888-1.299-4.482-.02-.385.094-.522.477-.592a4.7 4.7 0 0 1 1.53-.038c2.131.311 3.946 1.264 5.467 2.774.868.86 1.525 1.887 2.202 2.89.72 1.066 1.494 2.082 2.48 2.915.348.291.626.513.892.677-.802.09-2.14.109-3.055-.615zm1.001-6.44a.306.306 0 0 1 .415-.287.3.3 0 0 1 .113.074.3.3 0 0 1 .086.214c0 .17-.136.307-.308.307a.303.303 0 0 1-.306-.307m3.11 1.596c-.2.081-.4.151-.591.16a1.25 1.25 0 0 1-.798-.254c-.274-.23-.47-.358-.551-.758a1.7 1.7 0 0 1 .015-.588c.07-.327-.007-.537-.238-.727-.188-.156-.426-.199-.689-.199a.6.6 0 0 1-.254-.078.253.253 0 0 1-.114-.358 1 1 0 0 1 .192-.21c.356-.202.767-.136 1.146.016.352.144.618.408 1.001.782.392.451.462.576.685.915.176.264.336.536.446.848.066.194-.02.353-.25.45"/>
@@ -29,65 +34,65 @@
     </style>
   </defs>
 
-  <rect x="1" y="1" width="1198" height="298" rx="28" fill="url(#dbg)" stroke="#16305c"/>
+  <rect x="1" y="1" width="1198" height="298" rx="28" fill="url(#dbg)" stroke="#c6def7"/>
   <rect x="1" y="1" width="1198" height="298" rx="28" fill="url(#dhaze)"/>
 
   <g clip-path="url(#dradarClip)">
     <rect x="862" y="32" width="236" height="236" fill="url(#ddots)"/>
   </g>
 
-  <path d="M32 282c108-14 218 12 334-1s219-16 334 0 230 15 344-1 132-9 140-1" fill="none" stroke="#4d6bfe" stroke-opacity=".35" stroke-width="1.4"/>
+  <path d="M32 282c108-14 218 12 334-1s219-16 334 0 230 15 344-1 132-9 140-1" fill="none" stroke="#5b8cff" stroke-opacity=".26" stroke-width="1.4"/>
 
   <g filter="url(#dshadow)">
-    <rect x="64" y="76" width="148" height="148" rx="38" fill="#0d2957" fill-opacity=".9" stroke="#7f9bff" stroke-opacity=".34" stroke-width="1.5"/>
+    <rect x="64" y="76" width="148" height="148" rx="38" fill="#ffffff" fill-opacity=".96" stroke="#ffffff" stroke-width="1.5"/>
   </g>
-  <use href="#dwhale" fill="#dfe9ff" transform="translate(96 108) scale(3.5)"/>
-  <circle cx="192" cy="96" r="7" fill="#6ccbf7" fill-opacity=".22"/>
-  <circle cx="192" cy="96" r="3.2" fill="#6ccbf7"/>
+  <use href="#dwhale" fill="url(#dwhaleGrad)" transform="translate(96 108) scale(3.5)"/>
+  <circle cx="192" cy="96" r="7" fill="#22b8ef" fill-opacity=".2"/>
+  <circle cx="192" cy="96" r="3.2" fill="#22b8ef"/>
 
-  <g class="mono" fill="#8ea6ff" font-size="11" letter-spacing="2.6">
+  <g class="mono" fill="#2f5fe6" font-size="11" letter-spacing="2.6">
     <text x="252" y="104">INDEPENDENT DEVELOPER · 2026</text>
   </g>
-  <text class="sans" x="252" y="174" font-size="58" font-weight="800" letter-spacing="-1.5" fill="#eef5ff">里卡多</text>
-  <text class="mono" x="440" y="169" font-size="16" letter-spacing="4" fill="#7e95b7">RICARDO</text>
-  <text class="sans" x="252" y="214" font-size="23" font-weight="500" fill="#c2d1e7">让 AI 工作流，清澈一点。</text>
+  <text class="sans" x="252" y="174" font-size="58" font-weight="800" letter-spacing="-1.5" fill="#0b2a5c">里卡多</text>
+  <text class="mono" x="440" y="169" font-size="16" letter-spacing="4" fill="#7b93b3">RICARDO</text>
+  <text class="sans" x="252" y="214" font-size="23" font-weight="500" fill="#2b4c7e">让 AI 工作流，清澈一点。</text>
 
-  <g class="mono" font-size="10" letter-spacing="1.8" fill="#8ba3c7">
+  <g class="mono" font-size="10" letter-spacing="1.8" fill="#5e789c">
     <text x="252" y="254">AI TOOLS / PLUGINS</text>
-    <circle cx="407" cy="250" r="2" fill="#8ea6ff" fill-opacity=".65"/>
+    <circle cx="407" cy="250" r="2" fill="#3d6bf5" fill-opacity=".6"/>
     <text x="425" y="254">BLUE / WHITE</text>
-    <circle cx="534" cy="250" r="2" fill="#6ccbf7"/>
+    <circle cx="534" cy="250" r="2" fill="#22b8ef"/>
     <text x="552" y="254">DEEP SEA / 001</text>
   </g>
 
-  <circle cx="980" cy="150" r="118" fill="#0a2450" fill-opacity=".55" stroke="#8ea6ff" stroke-opacity=".16"/>
-  <circle cx="980" cy="150" r="82" fill="none" stroke="#8ea6ff" stroke-opacity=".16" stroke-dasharray="3 5"/>
-  <circle cx="980" cy="150" r="48" fill="none" stroke="#8ea6ff" stroke-opacity=".12"/>
-  <line x1="862" y1="150" x2="1098" y2="150" stroke="#8ea6ff" stroke-opacity=".1"/>
-  <line x1="980" y1="32" x2="980" y2="268" stroke="#8ea6ff" stroke-opacity=".1"/>
+  <circle cx="980" cy="150" r="118" fill="#ffffff" fill-opacity=".46" stroke="#3d6bf5" stroke-opacity=".18"/>
+  <circle cx="980" cy="150" r="82" fill="none" stroke="#3d6bf5" stroke-opacity=".16" stroke-dasharray="3 5"/>
+  <circle cx="980" cy="150" r="48" fill="none" stroke="#3d6bf5" stroke-opacity=".14"/>
+  <line x1="862" y1="150" x2="1098" y2="150" stroke="#3d6bf5" stroke-opacity=".12"/>
+  <line x1="980" y1="32" x2="980" y2="268" stroke="#3d6bf5" stroke-opacity=".12"/>
 
   <g>
     <path d="M980 150 L1098 150 A118 118 0 0 1 1078 216 Z" fill="url(#dsweep)">
       <animateTransform attributeName="transform" type="rotate" from="0 980 150" to="360 980 150" dur="12s" repeatCount="indefinite"/>
     </path>
-    <line x1="980" y1="150" x2="1098" y2="150" stroke="#8ea6ff" stroke-opacity=".45">
+    <line x1="980" y1="150" x2="1098" y2="150" stroke="#3d6bf5" stroke-opacity=".38">
       <animateTransform attributeName="transform" type="rotate" from="0 980 150" to="360 980 150" dur="12s" repeatCount="indefinite"/>
     </line>
   </g>
 
-  <circle cx="980" cy="150" r="42" fill="none" stroke="#8ea6ff" stroke-opacity=".3">
+  <circle cx="980" cy="150" r="42" fill="none" stroke="#3d6bf5" stroke-opacity=".24">
     <animate attributeName="r" values="36;52;36" dur="4.5s" repeatCount="indefinite"/>
-    <animate attributeName="stroke-opacity" values=".32;0;.32" dur="4.5s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values=".26;0;.26" dur="4.5s" repeatCount="indefinite"/>
   </circle>
   <circle cx="980" cy="150" r="30" fill="#ffffff" stroke="#ffffff"/>
-  <use href="#dwhale" fill="#4d6bfe" transform="translate(962 132) scale(1.5)"/>
+  <use href="#dwhale" fill="url(#dwhaleGrad)" transform="translate(962 132) scale(1.5)"/>
 
-  <g class="mono" font-size="8.5" letter-spacing="1.2" fill="#61789b">
+  <g class="mono" font-size="8.5" letter-spacing="1.2" fill="#8aa2c0">
     <text x="980" y="24" text-anchor="middle">00</text>
     <text x="1104" y="153">09</text>
     <text x="980" y="286" text-anchor="middle">18</text>
     <text x="856" y="153" text-anchor="end">27</text>
   </g>
-  <text class="mono" x="1136" y="56" text-anchor="end" font-size="9" letter-spacing="2" fill="#61789b">DEEP SEA / PROFILE</text>
-  <text class="mono" x="1136" y="286" text-anchor="end" font-size="9" letter-spacing="1.4" fill="#7e95b7">X 0915 · Y 2026</text>
+  <text class="mono" x="1136" y="56" text-anchor="end" font-size="9" letter-spacing="2" fill="#8aa2c0">DEEP SEA / PROFILE</text>
+  <text class="mono" x="1136" y="286" text-anchor="end" font-size="9" letter-spacing="1.4" fill="#748db0">X 0915 · Y 2026</text>
 </svg>
