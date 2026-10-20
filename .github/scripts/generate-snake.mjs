@@ -20,6 +20,13 @@ const COOLDOWN = 14;            // 同一格子多少 tick 后才可再进入
 const FOOD_FRACTIONS = [0.10, 0.22, 0.34, 0.47, 0.60, 0.74];
 
 const LEVEL_INDEX = { NONE: 0, FIRST_QUADRANT: 1, SECOND_QUADRANT: 2, THIRD_QUADRANT: 3, FOURTH_QUADRANT: 4 };
+// GraphQL 的等级枚举偶有无法映射的情况，至少按贡献数保留可见色阶
+function levelOf(day) {
+  if (!day) return 0;
+  const key = String(day.contributionLevel || '').toUpperCase();
+  if (Object.hasOwn(LEVEL_INDEX, key)) return LEVEL_INDEX[key];
+  return day.contributionCount > 0 ? 4 : 0;
+}
 const PALETTES = {
   dark:  { empty: '#0c2447', levels: ['#0c2447', '#123566', '#1e4f9e', '#4c73f8', '#8ea6ff'], snake: '#dbe9ff', food: '#6ccbf7', flash: '#6ccbf7' },
   light: { empty: '#edf3fb', levels: ['#edf3fb', '#dbe8ff', '#a9c6ff', '#6f8dff', '#2743d8'], snake: '#0a1b3d', food: '#4aa8dd', flash: '#6ccbf7' },
@@ -97,7 +104,7 @@ function buildPath(W, grid, rng) {
       if (d[0] === dir[0] && d[1] === dir[1]) w *= 5;   // 偏好直行（长滑行）
       if (d[0] === 1) w *= 1.6;                          // 整体向右推进
       const day = grid[nr][nc];
-      if (day && (LEVEL_INDEX[day.contributionLevel] ?? 0) > 0) w *= 1.6; // 被蓝色贡献格吸引
+      if (levelOf(day) > 0) w *= 1.6; // 被蓝色贡献格吸引
       cands.push({ d, w });
       total += w;
     }
@@ -166,7 +173,7 @@ function buildSvg(weeks, pal) {
   for (let r = 0; r < H; r++) {
     for (let c = 0; c < W; c++) {
       const day = grid[r][c];
-      const lv = day ? (LEVEL_INDEX[day.contributionLevel] ?? 0) : 0;
+      const lv = levelOf(day);
       const tip = day && day.contributionCount > 0 ? `<title>${day.date} · ${day.contributionCount} contributions</title>` : '';
       s += `<rect x="${cx([c, r]) - CELL / 2}" y="${cy([c, r]) - CELL / 2}" width="${CELL}" height="${CELL}" rx="3" fill="${pal.levels[lv]}">${tip}</rect>`;
     }
