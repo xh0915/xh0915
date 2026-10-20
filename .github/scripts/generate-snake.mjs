@@ -4,8 +4,8 @@ import { mkdirSync, writeFileSync } from 'node:fs';
  * 自研贡献蛇生成器 v2
  * - 均匀网格铺满（边缘残缺周补空格），格子严格对齐
  * - 有机随机游走路线：偏好直行、向右推进、主动经过有贡献的格子；每日换路线（日期做种子）
- * - 蛇严格在格子上移动；吃紫色格子后变长（3 节起步，封顶 10 节）
- * - 进食动画：紫格爆开 + 冲击环 + 蛇头闪白
+ * - 蛇严格在格子上移动；吃到青色食物后变长（3 节起步，封顶 10 节）
+ * - 进食动画：青色食物爆开 + 冲击环 + 蛇头闪光
  * - 格子颜色来自真实贡献数据；SMIL 动画，无 JS
  */
 
@@ -21,8 +21,8 @@ const FOOD_FRACTIONS = [0.10, 0.22, 0.34, 0.47, 0.60, 0.74];
 
 const LEVEL_INDEX = { NONE: 0, FIRST_QUADRANT: 1, SECOND_QUADRANT: 2, THIRD_QUADRANT: 3, FOURTH_QUADRANT: 4 };
 const PALETTES = {
-  dark:  { empty: '#161b22', greens: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'], snake: '#39d353', food: '#a371f7' },
-  light: { empty: '#ebedf0', greens: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'], snake: '#26a641', food: '#8250df' },
+  dark:  { empty: '#0c2447', levels: ['#0c2447', '#123566', '#1e4f9e', '#4c73f8', '#8ea6ff'], snake: '#dbe9ff', food: '#6ccbf7', flash: '#6ccbf7' },
+  light: { empty: '#edf3fb', levels: ['#edf3fb', '#dbe8ff', '#a9c6ff', '#6f8dff', '#2743d8'], snake: '#0a1b3d', food: '#4aa8dd', flash: '#6ccbf7' },
 };
 
 async function fetchCalendar() {
@@ -97,7 +97,7 @@ function buildPath(W, grid, rng) {
       if (d[0] === dir[0] && d[1] === dir[1]) w *= 5;   // 偏好直行（长滑行）
       if (d[0] === 1) w *= 1.6;                          // 整体向右推进
       const day = grid[nr][nc];
-      if (day && (LEVEL_INDEX[day.contributionLevel] ?? 0) > 0) w *= 1.6; // 被绿色贡献格吸引
+      if (day && (LEVEL_INDEX[day.contributionLevel] ?? 0) > 0) w *= 1.6; // 被蓝色贡献格吸引
       cands.push({ d, w });
       total += w;
     }
@@ -168,7 +168,7 @@ function buildSvg(weeks, pal) {
       const day = grid[r][c];
       const lv = day ? (LEVEL_INDEX[day.contributionLevel] ?? 0) : 0;
       const tip = day && day.contributionCount > 0 ? `<title>${day.date} · ${day.contributionCount} contributions</title>` : '';
-      s += `<rect x="${cx([c, r]) - CELL / 2}" y="${cy([c, r]) - CELL / 2}" width="${CELL}" height="${CELL}" rx="3" fill="${pal.greens[lv]}">${tip}</rect>`;
+      s += `<rect x="${cx([c, r]) - CELL / 2}" y="${cy([c, r]) - CELL / 2}" width="${CELL}" height="${CELL}" rx="3" fill="${pal.levels[lv]}">${tip}</rect>`;
     }
   }
   s += '</g>';
@@ -190,7 +190,7 @@ function buildSvg(weeks, pal) {
   });
   s += '</g>';
 
-  // 蛇：逐格滑行；到达出现 tick 时挂上尾巴；头在进食瞬间闪白
+  // 蛇：逐格滑行；到达出现 tick 时挂上尾巴；头在进食瞬间闪光
   s += '<g>';
   for (let i = 0; i < nSeg; i++) {
     const a = appear(i);
@@ -204,7 +204,7 @@ function buildSvg(weeks, pal) {
       + `<animate attributeName="opacity" dur="${dur}s" repeatCount="indefinite" calcMode="linear" keyTimes="${ktTail}" values="${vTail}"/>`;
     if (head) {
       const ft = [0], fv = [pal.snake];
-      for (const e of eatTicks) { ft.push(kt(e / T), kt((e + 1) / T)); fv.push('#ffffff', pal.snake); }
+      for (const e of eatTicks) { ft.push(kt(e / T), kt((e + 1) / T)); fv.push(pal.flash, pal.snake); }
       ft.push('1'); fv.push(pal.snake);
       s += `<animate attributeName="fill" dur="${dur}s" repeatCount="indefinite" calcMode="discrete" keyTimes="${ft.join(';')}" values="${fv.join(';')}"/>`;
     }
