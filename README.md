@@ -16,7 +16,9 @@
 <h3 align="center">NOW / 现在</h3>
 
 <p align="center">
-  搭建 <b>DeepSeek Harness</b> 插件，等第一件作品入水<br />
+  做 <b>DeepSeek Harness</b> 插件，两款已经下水：<br />
+  <a href="https://github.com/xh0915/dsh-voyage-log">航海日志</a> · 把一次会话整理成一份看得懂、可审计的报告<br />
+  <a href="https://github.com/xh0915/dsh-chart">航图</a> · 把跑通的步骤整理成一份下次能直接用的技能<br />
   <a href="https://xh0915.github.io">xh0915.github.io</a> — 蓝白作品集 · Vue 3 + FastAPI<br />
   持续学习 AI 工程与界面设计
 </p>
